@@ -1,6 +1,6 @@
 package com.nestor.demo.DTO;
 
-import java.time.LocalDateTime;
+import java.math.BigInteger;
 import java.util.List;
 
 import lombok.Data;
@@ -8,8 +8,7 @@ import lombok.Data;
 @Data
 public class OrderDTO {
 	
-	private LocalDateTime date;
-	private CustomerDTO customer;
+	private BigInteger total;
 	private Boolean status;
 	private List<ItemDTO> items;
 

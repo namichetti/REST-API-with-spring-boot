@@ -1,6 +1,6 @@
 package com.nestor.demo.model;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -30,12 +31,14 @@ public class Order {
 	private Long id;
 	@CreationTimestamp
 	private LocalDateTime date;
-	private BigInteger total;
+	private BigDecimal total;
 	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name="customer_id")
 	private Customer customer;
 	private Boolean status;
 	@OneToMany(mappedBy = "order", cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Item> items;
 	
 	public Order() {

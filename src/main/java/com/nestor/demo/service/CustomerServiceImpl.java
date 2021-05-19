@@ -5,12 +5,14 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nestor.demo.DTO.CustomerDTO;
 import com.nestor.demo.model.Customer;
 import com.nestor.demo.repository.ICustomerRepository;
 
+@Service
 public class CustomerServiceImpl implements ICustomerService{
 	
 	@Autowired
@@ -22,7 +24,7 @@ public class CustomerServiceImpl implements ICustomerService{
 	@Override
 	@Transactional(readOnly=true)
 	public List<Customer> getAll() {
-		return (List<Customer>) this.customerRepository.findAll();
+		return this.customerRepository.findAll();
 	}
 
 	@Override
