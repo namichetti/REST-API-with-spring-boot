@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nestor.demo.DTO.CustomerDTO;
+import com.nestor.demo.exception.NotFoundByIdCustomException;
+import com.nestor.demo.exception.NotFoundCustomException;
 import com.nestor.demo.model.Customer;
 import com.nestor.demo.repository.ICustomerRepository;
 
@@ -33,6 +35,33 @@ public class CustomerServiceImpl implements ICustomerService{
 	public void save(Customer customer) {
 		this.customerRepository.save(customer);
 	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public Customer getById(Long id) throws NotFoundCustomException, NotFoundByIdCustomException {
+		if(id>0) {
+		return this.customerRepository.findById(id).orElse(null);
+		}else {
+			throw new NotFoundByIdCustomException(); 
+		}
+	}
+	
+	@Override
+	@Transactional
+	public void deleteById(Long id) throws NotFoundCustomException, NotFoundByIdCustomException {
+		if(id>0) {
+		this.customerRepository.deleteById(id);
+		}else {
+			throw new NotFoundByIdCustomException(); 
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly=true)
+	public Customer searchByAddress(String address) throws NotFoundCustomException {
+		return this.customerRepository.findByAddress(address);
+	}
+
 
 	@Override
 	public List<CustomerDTO> ListEntityToDTOs(List<Customer> customers) {
@@ -40,7 +69,7 @@ public class CustomerServiceImpl implements ICustomerService{
 						.stream()
 						.map(customer-> this.modelMapper.map(customer, CustomerDTO.class))
 						.collect(Collectors.toList());
-		return customerDTOs;
+		return customerDTOs; 
 	}
 	
 	
@@ -55,4 +84,5 @@ public class CustomerServiceImpl implements ICustomerService{
 		return customer;
 	}
 
+	
 }
