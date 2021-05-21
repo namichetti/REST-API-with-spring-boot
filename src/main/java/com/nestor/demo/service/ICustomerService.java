@@ -9,4 +9,7 @@ public interface ICustomerService {
 
 	public List<Customer> getAll();
 	public List<CustomerDTO> ListEntityToDTOs(List<Customer> customers);
+	public CustomerDTO EntityToDTO(Customer customer);
+	public Customer DTOToEntity(CustomerDTO customerDTO);
+	public void save(Customer customer);
 }

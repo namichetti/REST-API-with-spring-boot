@@ -12,6 +12,7 @@ import com.nestor.demo.DTO.CustomerDTO;
 import com.nestor.demo.model.Customer;
 import com.nestor.demo.repository.ICustomerRepository;
 
+
 @Service
 public class CustomerServiceImpl implements ICustomerService{
 	
@@ -26,6 +27,12 @@ public class CustomerServiceImpl implements ICustomerService{
 	public List<Customer> getAll() {
 		return this.customerRepository.findAll();
 	}
+	
+	@Override
+	@Transactional
+	public void save(Customer customer) {
+		this.customerRepository.save(customer);
+	}
 
 	@Override
 	public List<CustomerDTO> ListEntityToDTOs(List<Customer> customers) {
@@ -34,6 +41,18 @@ public class CustomerServiceImpl implements ICustomerService{
 						.map(customer-> this.modelMapper.map(customer, CustomerDTO.class))
 						.collect(Collectors.toList());
 		return customerDTOs;
+	}
+	
+	
+	
+	public CustomerDTO EntityToDTO(Customer customer) {
+		CustomerDTO customerDTO = modelMapper.map(customer, CustomerDTO.class);
+		return customerDTO;
+	}
+
+	public Customer DTOToEntity(CustomerDTO customerDTO) {
+		Customer customer = modelMapper.map(customerDTO, Customer.class);
+		return customer;
 	}
 
 }
