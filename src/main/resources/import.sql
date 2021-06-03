@@ -12,11 +12,11 @@ INSERT INTO `db_rest_api`.`products` (`name`, `price`) VALUES ('Red Bull', '140'
 INSERT INTO `db_rest_api`.`products` (`name`, `price`) VALUES ('Monster', '75');
 
 
-INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2021-05-18 18:43:06', 1, 1, 1000);
-INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2021-04-11 10:03:06', 1, 1, 100.50);
-INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2020-12-21 19:43:06', 1, 2, 520);
-INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2020-11-18 18:43:06', 0, 3, 453.33);
-INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2021-05-04 10:13:06', 0, 4, 1000);
+INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2021-05-18 18:43:06', 1, 1, 0);
+INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2021-04-11 10:03:06', 1, 1, 0);
+INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2020-12-21 19:43:06', 1, 2, 0);
+INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2020-11-18 18:43:06', 0, 3, 0);
+INSERT INTO `db_rest_api`.`orders` (`date`, `status`, `customer_id`,`total`) VALUES ('2021-05-04 10:13:06', 0, 4, 0);
 
 INSERT INTO `db_rest_api`.`items` (`quantity`, `order_id`, `product_id`) VALUES ('30', '1', '1');
 INSERT INTO `db_rest_api`.`items` (`quantity`, `order_id`, `product_id`) VALUES ('3', '1', '1');

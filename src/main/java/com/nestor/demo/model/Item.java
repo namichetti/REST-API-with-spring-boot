@@ -1,6 +1,6 @@
 package com.nestor.demo.model;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,8 +34,8 @@ public class Item {
 	@JsonIgnore
 	private Product product;
 	
-	/*public BigInteger getSubTotal() {
-		BigInteger q = new BigInteger(this.quantity.toString());
+	public BigDecimal getSubTotal() {
+		BigDecimal q = new BigDecimal(this.quantity.toString());
 		return this.product.getPrice().multiply(q);
-	}*/
+	}
 }

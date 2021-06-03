@@ -14,12 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 
 @Data
 @Entity
@@ -31,25 +33,28 @@ public class Order {
 	private Long id;
 	@CreationTimestamp
 	private LocalDateTime date;
+	@Getter(value = AccessLevel.NONE)
 	private BigDecimal total;
 	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
-	@JsonIgnore
 	@JoinColumn(name="customer_id")
 	private Customer customer;
 	private Boolean status;
 	@OneToMany(mappedBy = "order", cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
-	@JsonIgnore
 	private List<Item> items;
 	
 	public Order() {
 		this.items = new ArrayList<>();
 	}
 	
-	/*public BigInteger getTotal(){
-		this.total = null;
+	@PrePersist
+	public void prePersist() {
+		this.status = true;
+	}
+	
+	public BigDecimal getTotal(){
 		for (Item item : items) {
-			total = total.and(item.getSubTotal());
+			total = total.add(item.getSubTotal());
 		}
 		return total;
-	}*/
+	}
 }

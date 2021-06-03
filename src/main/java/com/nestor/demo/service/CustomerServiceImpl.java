@@ -24,6 +24,7 @@ public class CustomerServiceImpl implements ICustomerService{
 	@Autowired
 	private ModelMapper modelMapper;
 
+
 	@Override
 	@Transactional(readOnly=true)
 	public List<Customer> getAll() {
@@ -38,36 +39,42 @@ public class CustomerServiceImpl implements ICustomerService{
 	
 	@Override
 	@Transactional(readOnly=true)
-	public Customer getById(Long id) throws NotFoundCustomException, NotFoundByIdCustomException {
+	public Customer getById(Long id) throws NotFoundCustomException, NotFoundByIdCustomException{
+		Customer customer = null;
+		
 		if(id>0) {
-		return this.customerRepository.findById(id).orElse(null);
-		}else {
+		customer = this.customerRepository.findById(id).orElse(null);
+			if(customer!=null) {
+				return customer;
+			}else {
+				throw new NotFoundCustomException();
+				}
+		    }else{
 			throw new NotFoundByIdCustomException(); 
 		}
+		
+		
 	}
 	
 	@Override
 	@Transactional
-	public void deleteById(Long id) throws NotFoundCustomException, NotFoundByIdCustomException {
-		if(id>0) {
+	public void deleteById(Long id) throws NotFoundCustomException, NotFoundByIdCustomException{
+		this.getById(id);
 		this.customerRepository.deleteById(id);
-		}else {
-			throw new NotFoundByIdCustomException(); 
-		}
 	}
 	
 	@Override
 	@Transactional(readOnly=true)
-	public Customer searchByAddress(String address) throws NotFoundCustomException {
+	public Customer searchByAddress(String address) {
 		return this.customerRepository.findByAddress(address);
 	}
 
 
-	@Override
+
 	public List<CustomerDTO> ListEntityToDTOs(List<Customer> customers) {
 		List<CustomerDTO> customerDTOs = customers
 						.stream()
-						.map(customer-> this.modelMapper.map(customer, CustomerDTO.class))
+						.map(object-> this.modelMapper.map(object, CustomerDTO.class))
 						.collect(Collectors.toList());
 		return customerDTOs; 
 	}
@@ -83,6 +90,5 @@ public class CustomerServiceImpl implements ICustomerService{
 		Customer customer = modelMapper.map(customerDTO, Customer.class);
 		return customer;
 	}
-
 	
 }
