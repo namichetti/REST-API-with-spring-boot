@@ -63,7 +63,7 @@ public class OrderController {
 		recoveredOrder.setStatus(order.getStatus());
 		recoveredOrder.setCustomer(order.getCustomer());
 		recoveredOrder.setItems(order.getItems());
-		this.orderService.save(order);
+		this.orderService.save(recoveredOrder);
 		return new ResponseEntity<>(recoveredOrder,HttpStatus.OK);
 	}
 	
