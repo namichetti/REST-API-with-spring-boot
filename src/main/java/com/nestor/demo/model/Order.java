@@ -19,6 +19,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -35,11 +37,13 @@ public class Order {
 	private LocalDateTime date;
 	@Getter(value = AccessLevel.NONE)
 	private BigDecimal total;
-	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name="customer_id")
+	@JsonIgnore
 	private Customer customer;
 	private Boolean status;
-	@OneToMany(mappedBy = "order", cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Item> items;
 	
 	public Order() {
@@ -49,6 +53,7 @@ public class Order {
 	@PrePersist
 	public void prePersist() {
 		this.status = true;
+		this.total = BigDecimal.ZERO;
 	}
 	
 	public BigDecimal getTotal(){

@@ -33,12 +33,6 @@ public class ProductController {
 		return productDTOs;
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id) throws NotFoundCustomException, NotFoundByIdCustomException{
-		this.productService.deleteById(id);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id) throws NotFoundCustomException, NotFoundByIdCustomException{
 		ProductDTO productDTO = this.productService.EntityToDTO(this.productService.getById(id));

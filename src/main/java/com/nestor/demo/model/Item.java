@@ -26,16 +26,19 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Integer quantity;
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="order_id")
 	private Order order;
-	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name="product_id")
 	@JsonIgnore
 	private Product product;
 	
+
+	
 	public BigDecimal getSubTotal() {
-		BigDecimal q = new BigDecimal(this.quantity.toString());
+		BigDecimal q =BigDecimal.ZERO;
+		q = new BigDecimal(this.quantity.toString());
 		return this.product.getPrice().multiply(q);
 	}
 }

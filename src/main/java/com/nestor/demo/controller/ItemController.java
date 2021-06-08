@@ -18,7 +18,11 @@ import com.nestor.demo.DTO.ItemDTO;
 import com.nestor.demo.exception.NotFoundByIdCustomException;
 import com.nestor.demo.exception.NotFoundCustomException;
 import com.nestor.demo.model.Item;
+import com.nestor.demo.model.Order;
+import com.nestor.demo.model.Product;
 import com.nestor.demo.service.IItemService;
+import com.nestor.demo.service.IOrderService;
+import com.nestor.demo.service.IProductService;
 
 @RestController
 @RequestMapping("/item")
@@ -26,6 +30,12 @@ public class ItemController {
 
 	@Autowired
 	private IItemService itemService;
+	
+	@Autowired
+	private IProductService productService;
+	
+	@Autowired
+	private IOrderService orderService;
 	
 	@GetMapping("/")
 	public List<ItemDTO> getAll(){
@@ -41,27 +51,34 @@ public class ItemController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getById(@PathVariable Long id) throws NotFoundCustomException, NotFoundByIdCustomException{
+	public ResponseEntity<?> getById(@PathVariable Long id) 
+			throws NotFoundCustomException, NotFoundByIdCustomException{
 		ItemDTO itemDTO = this.itemService.EntityToDTO(this.itemService.getById(id));
 		return new ResponseEntity<>(itemDTO,HttpStatus.OK);
 	}
 	
-	@PostMapping("/")
-	public ResponseEntity<?> save(@RequestBody ItemDTO itemDTO){
+	@PostMapping("/{order_id}")
+	public ResponseEntity<?> save(@PathVariable Long order_id, @RequestBody ItemDTO itemDTO) 
+			throws NotFoundCustomException, NotFoundByIdCustomException{
+		Order order = orderService.getById(order_id);
 		Item item = this.itemService.DTOToEntity(itemDTO);
+		item.setOrder(order);
 		this.itemService.save(item);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@RequestBody ItemDTO itemDTO, @PathVariable Long id) 
+	@PutMapping("/{item_id}/{order_id}/{product_id}")
+	public ResponseEntity<?> update(@RequestBody ItemDTO itemDTO, 
+			@PathVariable Long order_id, @PathVariable Long item_id,@PathVariable Long product_id) 
 			throws NotFoundCustomException, NotFoundByIdCustomException{
-		Item recoveredItem = this.itemService.getById(id);
+		Item recoveredItem = this.itemService.getById(item_id);
+		Product product = this.productService.getById(product_id);
 		Item item = this.itemService.DTOToEntity(itemDTO);
+		Order order = orderService.getById(order_id);
 		recoveredItem.setQuantity(item.getQuantity());
-		recoveredItem.setOrder(item.getOrder());
-		recoveredItem.setProduct(item.getProduct());
+		recoveredItem.setOrder(order);
+		recoveredItem.setProduct(product);
 		this.itemService.save(recoveredItem);
-		return new ResponseEntity<>(recoveredItem,HttpStatus.OK);
+		return new ResponseEntity<>(this.itemService.EntityToDTO(recoveredItem),HttpStatus.OK);
 	}
 }

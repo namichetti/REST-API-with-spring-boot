@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nestor.demo.DTO.OrderDTO;
 import com.nestor.demo.exception.NotFoundByIdCustomException;
 import com.nestor.demo.exception.NotFoundCustomException;
+import com.nestor.demo.model.Customer;
 import com.nestor.demo.model.Order;
+import com.nestor.demo.service.ICustomerService;
 import com.nestor.demo.service.IOrderService;
 
 @RestController
@@ -29,6 +31,9 @@ public class OrderController {
 	@Autowired
 	private IOrderService orderService;
 	
+	@Autowired
+	private ICustomerService customerService;
+		
 	@GetMapping("/")
 	public List<OrderDTO> getAll(){
 		List<Order> orders = this.orderService.getAll();
@@ -48,21 +53,24 @@ public class OrderController {
 		return new ResponseEntity<>(customerDTO,HttpStatus.OK);
 	}
 	
-	@PostMapping("/")
-	public ResponseEntity<?> save(@RequestBody OrderDTO orderDTO){
+	@PostMapping("/{customer_id}/")
+	public ResponseEntity<?> save(@PathVariable Long customer_id, @RequestBody OrderDTO orderDTO)
+			throws NotFoundCustomException, NotFoundByIdCustomException{
+		Customer customer = this.customerService.getById(customer_id);
 		Order order = this.orderService.DTOToEntity(orderDTO);
+		order.setCustomer(customer);
 		this.orderService.save(order);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@RequestBody OrderDTO orderDTO, @PathVariable Long id) 
+	@PutMapping("/{order_id}/{customer_id}")
+	public ResponseEntity<?> update(@RequestBody OrderDTO orderDTO,@PathVariable Long order_id,@PathVariable Long customer_id) 
 			throws NotFoundCustomException, NotFoundByIdCustomException{
-		Order recoveredOrder = this.orderService.getById(id);
+		Order recoveredOrder = this.orderService.getById(order_id);
 		Order order = this.orderService.DTOToEntity(orderDTO);
+		Customer customer = this.customerService.getById(customer_id);
+		recoveredOrder.setCustomer(customer);
 		recoveredOrder.setStatus(order.getStatus());
-		recoveredOrder.setCustomer(order.getCustomer());
-		recoveredOrder.setItems(order.getItems());
 		this.orderService.save(recoveredOrder);
 		return new ResponseEntity<>(recoveredOrder,HttpStatus.OK);
 	}

@@ -22,13 +22,13 @@ import com.nestor.demo.model.Customer;
 import com.nestor.demo.service.ICustomerService;
 
 
+
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
 	
 	@Autowired
 	private ICustomerService customerService;
-	
 	
 	@GetMapping("/")
 	public List<CustomerDTO> getAll(){
