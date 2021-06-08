@@ -2,9 +2,7 @@
 
 This REST API will be consumed for https://github.com/namichetti/webclient-spring-boot
 
-
-
-
+<br /> <br />
 
 
 ![uml](https://user-images.githubusercontent.com/73079790/120826043-6a73ad00-c530-11eb-8a34-06fc3b400603.png)
